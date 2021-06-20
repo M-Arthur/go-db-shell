@@ -1,4 +1,10 @@
 # go-db-shell
+[![Go Reference](https://pkg.go.dev/badge/github.com/M-Arthur/go-db-shell.svg)](https://pkg.go.dev/github.com/M-Arthur/go-db-shell)
+[![Go version](https://img.shields.io/badge/go-v1.16.5-blue.svg)](https://github.com/golang/go/tree/go1.16.5)
+[![Go MySQL Driver version](https://img.shields.io/badge/go_mysql_driver-v1.6.0-blue.svg)](https://github.com/go-sql-driver/mysql/tree/v1.6.0)
+
+https://github.com/go-sql-driver/mysql/tree/v1.6.0
+
 An extra layer which make communicate with database safer. All the query with placeholders will be escaped.
 
 ### Example
