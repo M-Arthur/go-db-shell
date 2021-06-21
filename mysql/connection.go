@@ -9,6 +9,8 @@ import (
 // connection represents the DB object which is used to execute SQL
 type connection interface {
 	Query(string, ...interface{}) (*sql.Rows, error)
+	QueryRow(string, ...interface{}) (*sql.Row, error)
+	Exec(string, ...interface{}) (sql.Result, error)
 	Close() error
 }
 
