@@ -2,6 +2,8 @@ package mysql
 
 import (
 	"database/sql"
+	"fmt"
+	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -12,6 +14,7 @@ type connection interface {
 	QueryRow(string, ...interface{}) (*sql.Row, error)
 	Exec(string, ...interface{}) (sql.Result, error)
 	Close() error
+	SelectRow(interface{}, string, string) error
 }
 
 // mysql is one solid implemetation of connection interface
@@ -48,6 +51,19 @@ func (m mysql) Exec(sql string, args ...interface{}) (sql.Result, error) {
 	}
 
 	return m.db.Exec(queryString)
+}
+
+func (m mysql) SelectRow(structure interface{}, tableName string, conditions string) error {
+	rStruct := newReflectStruct(structure)
+	fieldArray := make([]string, rStruct.numField)
+	addressArray := make([]interface{}, rStruct.numField)
+	for i := 0; i < rStruct.numField; i++ {
+		fieldArray[i] = strings.ToLower(fmt.Sprintf("`%s`", rStruct.getFiledNameByIndex(i)))
+		addressArray[i] = rStruct.getFieldAddressByIndex(i)
+	}
+	sql := fmt.Sprintf("SELECT %s FROM %s %s", strings.Join(fieldArray, ", "), tableName, conditions)
+
+	return m.db.QueryRow(sql).Scan(addressArray...)
 }
 
 // Close closes the database and prevents new queries from starting. Close then waits for all queries that have started processing on the server to finish.
